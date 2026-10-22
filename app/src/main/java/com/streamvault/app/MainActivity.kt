@@ -105,6 +105,9 @@ class MainActivity : ComponentActivity(), CatalogPlatformHost {
     lateinit var providerRepository: ProviderRepository
 
     @Inject
+    lateinit var playlistBootstrap: PlaylistBootstrap
+
+    @Inject
     internal lateinit var appStartupCoordinator: AppStartupCoordinator
 
     @Inject
@@ -258,6 +261,11 @@ class MainActivity : ComponentActivity(), CatalogPlatformHost {
                                 catalogPlatformHost = this@MainActivity,
                                 onCloseApp = ::closeApp
                             )
+
+                            LaunchedEffect(Unit) {
+                                lifecycleScope.launch { playlistBootstrap.run() }
+                            }
+
                             LaunchedEffect(Unit) {
                                 dispatchPendingExternalNavigationRequests()
                                 window.decorView.doOnPreDraw {
